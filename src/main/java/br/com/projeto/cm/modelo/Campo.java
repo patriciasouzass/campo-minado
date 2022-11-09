@@ -1,5 +1,6 @@
 package br.com.projeto.cm.modelo;
 
+import br.com.projeto.cm.excecao.ExplosaoException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -31,9 +32,44 @@ public class Campo {
         if (deltaGeral == 1 && !diagonal) {
             vizinhos.add(vizinho);
             return true;
-        } else if (deltaGeral == 2 && !diagonal) {
+        } else if (deltaGeral == 2 && diagonal) {
             vizinhos.add(vizinho);
             return true;
         } else return false;
+    }
+
+    void alternarMarcacao() {
+        if (!aberto) {
+            marcado = !marcado;
+        }
+    }
+
+    boolean abrir() {
+
+        if (!aberto && !marcado) {
+            aberto = true;
+
+            if (minado) {
+                throw new ExplosaoException();
+            }
+            if (vizinhancaSegura()) {
+                vizinhos.forEach(v -> v.abrir());
+            }
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    boolean vizinhancaSegura() {
+        return vizinhos.stream().noneMatch(v -> v.minado);
+    }
+
+    void minar() {
+        marcado = true;
+    }
+
+    public boolean isMarcado() {
+        return marcado;
     }
 }
