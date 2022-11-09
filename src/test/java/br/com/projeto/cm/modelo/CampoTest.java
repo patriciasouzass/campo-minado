@@ -1,10 +1,12 @@
 package br.com.projeto.cm.modelo;
 
+import br.com.projeto.cm.excecao.ExplosaoException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 
 import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 public class CampoTest {
@@ -57,5 +59,51 @@ public class CampoTest {
         Campo vizinho = new Campo(1, 1);
         boolean resultado = campo.adicionarVizinho(vizinho);
         assertFalse(resultado);
+    }
+
+    @Test
+    void testeValorPadraoAlternarMarcacao() {
+        assertFalse(campo.isMarcado());
+    }
+
+    @Test
+    void testeAlternarMarcacao() {
+        campo.alternarMarcacao();
+        assertTrue(campo.isMarcado());
+    }
+
+    @Test
+    void testeAlternarMarcacaoDuasVezes() {
+        campo.alternarMarcacao();
+        campo.alternarMarcacao();
+        assertFalse(campo.isMarcado());
+    }
+
+    @Test
+    void testeAbrirNaoMinadoNaoMarcado() {
+        assertTrue(campo.abrir());
+    }
+
+    @Test
+    void testeAbrirNaoMinadoMarcado() {
+        campo.alternarMarcacao();
+        assertFalse(campo.abrir());
+    }
+
+    @Test
+    void testeAbrirMinadoMarcado() {
+        campo.alternarMarcacao();
+        campo.minar();
+        assertFalse(campo.abrir());
+    }
+
+    @Test
+    void testeAbrirMinadoNaoMarcado() {
+        campo.minar();
+
+        assertThrows(ExplosaoException.class, () -> {
+            campo.abrir();
+        });
+//        assertFalse(campo.abrir());
     }
 }
