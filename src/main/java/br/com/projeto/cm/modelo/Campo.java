@@ -35,7 +35,9 @@ public class Campo {
         } else if (deltaGeral == 2 && diagonal) {
             vizinhos.add(vizinho);
             return true;
-        } else return false;
+        } else {
+            return false;
+        }
     }
 
     void alternarMarcacao() {
@@ -66,10 +68,22 @@ public class Campo {
     }
 
     void minar() {
-        marcado = true;
+        minado = true;
+    }
+
+    public boolean isAberto() {
+        return aberto;
+    }
+
+    public boolean isMinado() {
+        return minado;
     }
 
     public boolean isMarcado() {
         return marcado;
+    }
+
+    public boolean isFechado() {
+        return !isAberto();
     }
 }
